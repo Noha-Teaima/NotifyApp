@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
+import 'package:notify/NoteApp/myApp.dart';
 import 'package:notify/main.dart';
 import 'package:notify/newNotify/notificationService.dart';
 // import 'package:task1/NoteApp/model/notesModel.dart';
@@ -38,7 +39,7 @@ class _NoteAppState extends State<NoteApp> {
         backgroundColor: Colors.green,
         title: Text(
           "Note",
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, color: Colors.white),
         ),
         actions: [
           // Icon(Icons.search),
@@ -50,7 +51,10 @@ class _NoteAppState extends State<NoteApp> {
                 cubit.removeAll();
                 setState(() {});
               },
-              child: Icon(CupertinoIcons.delete)),
+              child: Icon(
+                CupertinoIcons.delete,
+                color: Colors.white,
+              )),
           SizedBox(
             width: 27,
           )
@@ -71,45 +75,55 @@ class _NoteAppState extends State<NoteApp> {
                   padding: const EdgeInsets.all(10.0),
                   child: BlocBuilder<NoteCubit, NoteState>(
                     builder: (context, state) {
-                      if (state is NoteLoadingItem &&
-                          cubit.updateIndex == index) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
+                      // if (state is NoteLoadingItem &&
+                      //     cubit.updateIndex == index) {
+                      //   return Center(
+                      //     child: CircularProgressIndicator(),
+                      //   );
+                      // }
                       return InkWell(
                         onTap: () {
-                          _textController.text = HiveHelper.Notes[index];
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        if (_textController.text.isNotEmpty) {
-                                          Navigator.of(context).pop();
-                                          cubit.updateIndex = index;
-                                          cubit.updateItem(
-                                              index, _textController.text);
-                                          _textController.text = "";
-                                          setState(() {});
-                                        }
-                                      },
-                                      child: Text(
-                                        "Ok",
-                                      ),
-                                      // c: Color.fromARGB(255, 155, 51, 219),
-                                    ),
-                                  ],
-                                  title: Text("Add Your Note"),
-                                  content: TextFormField(
-                                    controller: _textController,
-                                  ),
+                          print("befo" + HiveHelper.Desc[index]);
 
-                                  // content: Text("Please Enter The Correct Id"),
-                                );
-                              });
+                          Notification_title.text = HiveHelper.Notes[index];
+
+                          Notification_descrp.text = HiveHelper.Desc[index];
+                          print("after");
+                          cubit.removeItem(index);
+                          // cubit.updateIndex = index;
+                          Get.to(MyHomePage());
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (context) {
+                          //       return AlertDialog(
+                          //         actions: [
+                          //           TextButton(
+                          //             onPressed: () {
+                          //               if (_textController.text.isNotEmpty) {
+                          //                 Navigator.of(context).pop();
+                          //                 cubit.updateIndex = index;
+                          //                 cubit.updateItem(
+                          //                     index,
+                          //                     Notification_title.text,
+                          //                     Notification_descrp.text);
+                          //                 _textController.text = "";
+                          //                 setState(() {});
+                          //               }
+                          //             },
+                          //             child: Text(
+                          //               "Ok",
+                          //             ),
+                          //             // c: Color.fromARGB(255, 155, 51, 219),
+                          //           ),
+                          //         ],
+                          //         title: Text("Add Your Note"),
+                          //         content: TextFormField(
+                          //           controller: _textController,
+                          //         ),
+
+                          //         // content: Text("Please Enter The Correct Id"),
+                          //       );
+                          //     });
                         },
                         child: Stack(children: [
                           BlocBuilder<NoteCubit, NoteState>(

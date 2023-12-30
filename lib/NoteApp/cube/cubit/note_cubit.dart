@@ -17,8 +17,8 @@ class NoteCubit extends Cubit<NoteState> {
     emit(NoteSuccess());
   }
 
-  void addNotes(String text) {
-    HiveHelper.addNote(text);
+  void addNotes(String text, String desc) {
+    HiveHelper.addNote(text, desc);
     emit(NoteSuccess());
   }
 
@@ -32,10 +32,10 @@ class NoteCubit extends Cubit<NoteState> {
     emit(NoteSuccess());
   }
 
-  void updateItem(int index, String text) {
+  void updateItem(int index, String text, String desc) {
     emit(NoteLoadingItem());
 
-    HiveHelper.updateNotes(index, text);
+    HiveHelper.updateNotes(index, text, desc);
     emit(NoteSuccess());
   }
 
@@ -56,7 +56,7 @@ class NoteCubit extends Cubit<NoteState> {
   List<Map> users = [];
   void postData({required String email, required String password}) async {
     emit(testNoteLoad());
-    var response = await Dio().post( "https://student.valuxapps.com/api/login",
+    var response = await Dio().post("https://student.valuxapps.com/api/login",
         data: {"email": email, "password": password});
     // List json = response.data;
 
